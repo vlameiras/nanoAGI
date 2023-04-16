@@ -47,7 +47,32 @@ Run the main module and pass the objective as an argument:
 python main.py "I want to build an Helo world Flask app."
 ```
 
-## Known Issues
+## 🚧 Known Issues
 
 - It tends to keep adding tasks to the todo list, changing priorities and "rambling" over small details. The algorithm needs to be improved to avoid this behavior.
 - The execution between iterations takes longer than expected. Needs to be understood and improved.
+
+## 📝 TODO
+
+- [ ] Cleanup the code
+- [ ] Add more tools. Currently it only has `Search` and `Todo`. Including LLama Index
+- [ ] Improve the algorithm to avoid "rambling" behavior
+- [ ] Improve the execution time between iterations
+- [ ] Understand better the usage of `Pinecone`
+- [ ] Add new agent types and iterate with different prompts
+- [ ] Add a way for user feedback during execution to improve the agent's behavior
+- [ ] Implement a simple version of [JARVIS](https://github.com/microsoft/JARVIS) 
+
+## 📚 References
+
+- [BabyAGI](https://yoheinakajima.com/task-driven-autonomous-agent-utilizing-gpt-4-pinecone-and-langchain-for-diverse-applications/)
+- [Task-Driven Autonomous Agent System](https://github.com/kalaspuff/ai-assisted-task-executor)
+- [Embeddings](https://docs.pinecone.io/docs/openai)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!
+
+## 📝 License
+
+MIT License (MIT) - see [LICENSE](LICENSE) for more details.
