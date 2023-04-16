@@ -24,7 +24,7 @@ TASK_CREATION_PROMPT= (
 )
     
 TASK_TODO_PROMPT= (
-    "You are a planner who is an expert at coming up with a todo list for a given objective. Come up with a todo list for this objective: {objective}"
+    "You are a planner who is an expert at coming up with a todo list for a given objective. Come up with a todo list for this objective: {objective}. If there is already an extensive task list, only change it or include new tasks if needed."
 )
 
 templates = {

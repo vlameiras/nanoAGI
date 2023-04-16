@@ -1,5 +1,6 @@
 from collections import deque
 import os
+import sys
 from typing import Dict, List
 from langchain.vectorstores import FAISS
 from langchain.docstore import InMemoryDocstore
@@ -60,27 +61,25 @@ def prioritize_tasks(
     response = task_prioritization_chain.chain.llm_chain.run(
         task_names=task_names, next_task_id=next_task_id, objective=objective
     )
-    new_tasks = response.split("\n")
-    prioritized_task_list = []
-    for task_string in new_tasks:
-        if not task_string.strip():
-            continue
-        task_parts = task_string.strip().split(".", 1)
-        if len(task_parts) == 2:
-            task_id = task_parts[0].strip()
-            task_name = task_parts[1].strip()
-            prioritized_task_list.append(Task(task_id, task_name, task_name))
+    new_tasks = [t for t in response.split("\n") if t.strip()]
+    prioritized_task_list = [
+        Task(task_id, task_name, task_name)
+        for task_id, task_name in [
+            task_string.strip().split(".", maxsplit=1)
+            for task_string in new_tasks
+        ]
+    ]
     return prioritized_task_list
-
 
 # main
 if __name__ == "__main__":
-    OBJECTIVE = "Build a hello world Flask application."
+    # get objective from python argument sys argv
+    OBJECTIVE = sys.argv[1]
 
     task_creation_chain = TaskCreationChain("task_creation")
     task_priority_chain = TaskPriorityChain("task_priority")
     task_todo_chain = TaskTodoChain("task_todo")
-    task_execution_chain = TaskExecutionChain("task_execution", task_todo_chain.chain.llm_chain)
+    task_execution_agent= TaskExecutionChain("task_execution", task_todo_chain.chain.llm_chain)
  
     tasks = deque()
     tasks.append(Task("1", "todo list", "Make a concise todo list"))
@@ -101,7 +100,7 @@ if __name__ == "__main__":
         if current_task is None:
             break
 
-        task_result = task_execution_chain.execute_task(OBJECTIVE, current_task, vectorstore)
+        task_result = task_execution_agent.execute_task(OBJECTIVE, current_task, vectorstore)
         vectorstore.add_texts(
             texts=[task_result],
             metadatas=[{"task": current_task.task_name}],
