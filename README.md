@@ -45,7 +45,7 @@ export SERP_API_KEY=<your_serp_api_key>
 Run the main module and pass the objective as an argument:
 
 ```bash
-python main.py "I want to build an Helo world Flask app."
+python main.py "I want to build an Hello world Flask app."
 ```
 
 ## 🚧 Known Issues
