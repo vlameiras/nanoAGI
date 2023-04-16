@@ -3,7 +3,8 @@
 
 ## 🌐 Introduction
 
-`nanoAGI` is an implementation of popular autonomous task management systems like [BabyAGI](https://github.com/yoheinakajima/babyagi/tree/main) and [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT). It also takes a lot of inspiration from [LangChain Agent examples](https://python.langchain.com/en/latest/use_cases/agents/baby_agi_with_agent.html)
+`nanoAGI` is an implementation of popular autonomous task management systems like [BabyAGI](https://github.com/yoheinakajima/babyagi/tree/main) and [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT). It also takes a lot of inspiration from [LangChain Agent examples](https://python.langchain.com/en/latest/use_cases/agents/baby_agi_with_agent.html).
+There is nothing innovative about it in regards to existing solutions and much less capable in terms of features. The main reason for it was to learn and to build it in a way that I feel more comfortable researching and trying new features.
 
 For a more detailed overview of the approach, please refer to BabyAGI's "generated paper" [here](https://yoheinakajima.com/task-driven-autonomous-agent-utilizing-gpt-4-pinecone-and-langchain-for-diverse-applications/).
 
