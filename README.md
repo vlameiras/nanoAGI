@@ -61,7 +61,8 @@ python main.py "I want to build an Helo world Flask app."
 - [ ] Understand better the usage of `Pinecone`
 - [ ] Add new agent types and iterate with different prompts
 - [ ] Add a way for user feedback during execution to improve the agent's behavior
-- [ ] Implement a simple version of [JARVIS](https://github.com/microsoft/JARVIS) 
+- [ ] Consider implementing a simple version of [JARVIS](https://github.com/microsoft/JARVIS)
+- [ ] Consider implementing [CAMEL](https://github.com/lightaime/camel)
 
 ## 📚 References
 
