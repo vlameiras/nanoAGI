@@ -82,7 +82,8 @@ if __name__ == "__main__":
     task_execution_agent= TaskExecutionChain("task_execution", task_todo_chain.chain.llm_chain)
  
     tasks = deque()
-    tasks.append(Task("1", "todo list", "Make a concise todo list"))
+    tasks.append(Task("1", "first approach", "If it is a straightforward question, I should build a really short todo list. If it is a complex question, I would like to build a proper step by step todo list." +
+                      "Take into consideration that when asked about current events, something that refers to outside your training date, you probably should use SEARCH or Wikipedia to get an accurat information."))
 
     # counter for task ids
     task_id_counter = 1

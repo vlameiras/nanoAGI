@@ -42,9 +42,9 @@ class TaskPriorityChain:
 
 class TaskExecutionChain:
     def __init__(self, chain_name: str, todo_chain: LLMChain):
-        self.tools = Tools(todo_chain=todo_chain)
-        prompt = get_execution_prompt_template(self.tools)
         llm = OpenAI(temperature=0, max_tokens=256)
+        self.tools = Tools(todo_chain=todo_chain, llm=llm)
+        prompt = get_execution_prompt_template(self.tools)
         self.llm_chain = LLMChain(llm=llm, prompt=prompt)
         self.tool_names = [tool.name for tool in self.tools.tools]
         self.agent = ZeroShotAgent(llm_chain=self.llm_chain, allowed_tools=self.tool_names)
