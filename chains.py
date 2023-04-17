@@ -2,8 +2,9 @@ from collections import deque
 from typing import List
 from langchain import LLMChain, OpenAI, PromptTemplate
 from langchain.agents import ZeroShotAgent, AgentExecutor
+import openai
 from prompts import get_execution_prompt_template, templates
-from tasks import Task, get_top_tasks
+from tasks import Task
 from tools import Tools
 
 
@@ -50,10 +51,35 @@ class TaskExecutionChain:
         self.agent = ZeroShotAgent(llm_chain=self.llm_chain, allowed_tools=self.tool_names)
         self.agent_executor = AgentExecutor.from_agent_and_tools(
             agent=self.agent, tools=self.tools.tools, verbose=True)
+        
+    def get_ada_embedding(self, text: str):
+        text = text.replace("\n", " ")
+        return openai.Embedding.create(input=[text], model="text-embedding-ada-002")[
+            "data"
+        ][0]["embedding"]
 
-    def execute_task(self, objective: str, task: Task, vectorstore) -> str:
-        context = get_top_tasks(vectorstore, query=task.task_description, k=5)
-        return self.agent_executor.run(objective=objective, context=context, task=task.task_description)
+    def context_agent(self, query: str, top_results_num: int, vector_index):
+        query_embedding = self.get_ada_embedding(query)
+        results = vector_index.query(query_embedding, top_k=top_results_num, include_metadata=True, namespace=query)
+        sorted_results = sorted(results.matches, key=lambda x: x.score, reverse=True)
+        return [(str(item.metadata["task"])) for item in sorted_results]
+
+    def execute_task(self, objective: str, task: Task, index) -> str:
+        context = self.context_agent(query=objective, top_results_num=5, vector_index=index)
+        result = self.agent_executor.run(objective=objective, context=context, task=task.task_description)
+        enriched_result = {
+            "data": result
+        }  # This is where you should enrich the result if needed
+        result_id = f"result_{task.task_id}"
+        vector = self.get_ada_embedding(
+            enriched_result["data"]
+        )  # get vector of the actual result extracted from the dictionary
+        index.upsert(
+            [(result_id, vector, {"task": task.task_name, "result": result})],
+	    namespace=objective
+        )
+
+        return enriched_result
 
 class TaskTodoChain:
     def __init__(self, chain_name: str):

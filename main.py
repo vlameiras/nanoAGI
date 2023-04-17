@@ -2,19 +2,10 @@ from collections import deque
 import os
 import sys
 from typing import Dict, List
-from langchain.vectorstores import FAISS
-from langchain.docstore import InMemoryDocstore
-from langchain.embeddings import OpenAIEmbeddings
-import faiss
+import pinecone
 from chains import TaskCreationChain,TaskExecutionChain, TaskPriorityChain, TaskTodoChain
 from tasks import Task
 
-# Define your embedding model
-embeddings_model = OpenAIEmbeddings()
-# Initialize the vectorstore as empty
-embedding_size = 1536
-index = faiss.IndexFlatL2(embedding_size)
-vectorstore = FAISS(embeddings_model.embed_query, index, InMemoryDocstore({}), {})
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if OPENAI_API_KEY is None:
@@ -23,10 +14,20 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 if PINECONE_API_KEY is None:
     raise ValueError("PINECONE_API_KEY environment variable not set")
 
-# implement get_next_task
-# def get_next_task(task_creation_chain, result, objective):
-#     new_task = task_creation_chain.create_task(result, objective)
-#     return new_task
+pinecone.init(api_key=PINECONE_API_KEY, environment="us-east4-gcp")
+
+# Create Pinecone index
+table_name = "test-index"
+dimension = 1536
+metric = "cosine"
+pod_type = "s1.x1"
+if table_name not in pinecone.list_indexes():
+    pinecone.create_index(
+        table_name, dimension=dimension, metric=metric, pod_type=pod_type
+    )
+
+# Connect to the index
+index = pinecone.Index(table_name)
 
 def get_next_task(
     task_creation_chain: TaskCreationChain,
@@ -46,7 +47,6 @@ def get_next_task(
     new_tasks = response.split("\n")
     new_tasks = [{"task_description": task_description, "task_name": task_description} for task_description in new_tasks if task_description.strip()]
     return new_tasks
-
 
 
 def prioritize_tasks(
@@ -84,8 +84,7 @@ if __name__ == "__main__":
     task_execution_agent= TaskExecutionChain("task_execution", task_todo_chain.chain.llm_chain)
  
     tasks = deque()
-    tasks.append(Task("1", "first approach", "If it is a straightforward question, I should build a really short todo list. If it is a complex question, I would like to build a proper step by step todo list." +
-                      "Take into consideration that when asked about current events, something that refers to outside your training date, you probably should use SEARCH or Wikipedia to get an accurat information."))
+    tasks.append(Task("1", "todo list", "build a todo list"))
 
     # counter for task ids
     task_id_counter = 1
@@ -103,12 +102,7 @@ if __name__ == "__main__":
         if current_task is None:
             break
 
-        task_result = task_execution_agent.execute_task(OBJECTIVE, current_task, vectorstore)
-        lists_ids = vectorstore.add_texts(
-            texts=[task_result],
-            metadatas=[{"task": current_task.task_name}],
-            ids=[current_task.task_id],
-        )
+        task_result = task_execution_agent.execute_task(OBJECTIVE, current_task, index)
 
         new_tasks = get_next_task(task_creation_chain=task_creation_chain, result=task_result, 
                                   task_description=current_task.task_description, task_list=tasks, objective=OBJECTIVE)
