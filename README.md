@@ -60,16 +60,12 @@ python main.py "I want to build an Hello world Flask app."
 
 ## 📝 TODO
 
-- [ ] Use pinecone to store the embeddings. Currently, it only uses the `InMemoryDocstore` which is not persistent.
 - [ ] Cleanup the code
 - [ ] Add more tools. Currently, it only has `Search`, `Todo`, `Wikipedia`, `Calculator` and `Requests`. Including LLama Index
 - [ ] Improve the algorithm to avoid "rambling" behavior
 - [ ] Improve the execution time between iterations
-- [ ] Understand better the usage of `Pinecone`
 - [ ] Add new agent types and iterate with different prompts
 - [ ] Add a way for user feedback during execution to improve the agent's behavior
-- [ ] Consider implementing a simple version of [JARVIS](https://github.com/microsoft/JARVIS)
-- [ ] Consider implementing [CAMEL](https://github.com/lightaime/camel)
 - [ ] When the algorithm is stable, consider adding a reviewer Agent to improve the quality of the answers
 
 ## 📚 References
