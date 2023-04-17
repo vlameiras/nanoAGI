@@ -60,7 +60,7 @@ python main.py "I want to build an Hello world Flask app."
 
 ## 📝 TODO
 
-- [ ] Use pinecone to store the embeddings. Currently it only uses the in memory storage.
+- [ ] Use pinecone to store the embeddings. Currently, it only uses the `InMemoryDocstore` which is not persistent.
 - [ ] Cleanup the code
 - [ ] Add more tools. Currently, it only has `Search`, `Todo`, `Wikipedia`, `Calculator` and `Requests`. Including LLama Index
 - [ ] Improve the algorithm to avoid "rambling" behavior
