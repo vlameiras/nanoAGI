@@ -1,12 +1,11 @@
 from typing import List
-from langchain import SerpAPIWrapper
 from langchain.agents import Tool
 from langchain.chains import LLMMathChain
-from langchain.utilities import TextRequestsWrapper, WikipediaAPIWrapper
+from langchain.utilities import GoogleSerperAPIWrapper, TextRequestsWrapper, WikipediaAPIWrapper
 
 class Tools:
     def __init__(self, todo_chain, llm):
-        self.search = SerpAPIWrapper()
+        self.search = GoogleSerperAPIWrapper()
         self.wikipedia = WikipediaAPIWrapper()
         self.requests = TextRequestsWrapper()
         self.llm_math_chain = LLMMathChain(llm=llm, verbose=True)
@@ -25,17 +24,17 @@ class Tools:
         Tool(
             name="Wikipedia",
             func=self.wikipedia.run,
-            description="useful for when you need to answer concrete questions that would be found on a wikipedia page. Like historic figures, events. Input: a question. Output: a wikipedia page that answers that question. Please be very clear what the question is!",
+            description="Useful for finding information about a specific topic. You cannot use this tool to ask questions, only to find information about a specific topic.",
         ),
         Tool(
             name="Requests",
             func=self.requests.get,
-            description="useful when you need to access a website, an API or other web resource. Input: a url. Output: the text on that website. Please be very clear what the url is!",
+            description="useful when you need to access a website or API. Input: Valid URL.Please be very clear what the URL is! Output: The text of the website or API. ",
         ),
         Tool(
             name="Calculator",
             func=self.llm_math_chain.run,
-            description="useful for when you need to answer questions about math"
+            description="useful for when you need to answer questions about mathematical operations"
         )
     ]
         self.tool_names = [tool.name for tool in self.tools]

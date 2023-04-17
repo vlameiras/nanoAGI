@@ -74,7 +74,9 @@ def prioritize_tasks(
 # main
 if __name__ == "__main__":
     # get objective from python argument sys argv
-    OBJECTIVE = sys.argv[1]
+    # check if sys.argv is not None else default to "What is the current situation in the United States?"
+    OBJECTIVE = sys.argv[1] if len(sys.argv) > 1 else "What is the current situation in the United States?"
+    print("Objective: ", OBJECTIVE)
 
     task_creation_chain = TaskCreationChain("task_creation")
     task_priority_chain = TaskPriorityChain("task_priority")
@@ -102,7 +104,7 @@ if __name__ == "__main__":
             break
 
         task_result = task_execution_agent.execute_task(OBJECTIVE, current_task, vectorstore)
-        vectorstore.add_texts(
+        lists_ids = vectorstore.add_texts(
             texts=[task_result],
             metadatas=[{"task": current_task.task_name}],
             ids=[current_task.task_id],

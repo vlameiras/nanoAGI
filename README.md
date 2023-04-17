@@ -20,7 +20,7 @@ For a more detailed overview of the approach, please refer to BabyAGI's "generat
 - Python 3.8+
 - [Pinecone API Key](https://docs.pinecone.io/getting-started/quickstart/)
 - [OpenAI API Key](https://openai.com/docs/developer-quickstart/api-key-creation)
-- [SERP API Key](https://serpapi.com/)
+- [SERPER API Key](https://serperapi.com/)
 
 ## 🛠 Installation
 
@@ -37,7 +37,7 @@ Setup the environment variables:
 ```bash
 export PINECONE_API_KEY=<your_pinecone_api_key>
 export OPENAI_API_KEY=<your_openai_api_key>
-export SERP_API_KEY=<your_serp_api_key>
+export SERPER_API_KEY=<your_serper_api_key>
 ```
 
 ## 🚀 Usage
