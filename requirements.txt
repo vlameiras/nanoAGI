@@ -38,6 +38,6 @@ tiktoken==0.3.3
 tqdm==4.65.0
 typing-inspect==0.8.0
 typing_extensions==4.5.0
-urllib3==1.26.15
+urllib3==1.26.18
 wikipedia==1.4.0
 yarl==1.8.2
